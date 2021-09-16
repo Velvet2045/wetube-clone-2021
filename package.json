@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "The best way to watch videos.",
   "scripts": {
-    "dev": "nodemon -L --exec babel-node src/server.js"
+    "db-start": "sudo service mongodb start",
+    "db-end": "sudo service mongodb stop",
+    "dev": "nodemon -L --exec babel-node src/init.js"
   },
   "repository": {
     "type": "git",
@@ -17,6 +19,7 @@
   "homepage": "https://github.com/Velvet2045/wetube-clone-2021#readme",
   "dependencies": {
     "express": "^4.17.1",
+    "mongoose": "^6.0.5",
     "morgan": "^1.10.0",
     "pug": "^3.0.2"
   },
