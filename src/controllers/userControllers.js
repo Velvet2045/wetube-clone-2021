@@ -14,7 +14,7 @@ export const postJoin = async (req, res) => {
     });
   }
   const exists = await User.exists({ $or: [{ username }, { email }] });
-  if (!exists) {
+  if (exists) {
     return res.status(400).render("join", {
       pageTitle,
       errorMessage: "This username/email is already taken.",
@@ -133,9 +133,44 @@ export const finishGithubLogin = async (req, res) => {
   }
 };
 
-export const edit = (req, res) => res.send("Edit User");
 export const logout = (req, res) => {
   req.session.destroy();
   return res.redirect("/");
 };
+
+export const getEdit = (req, res) => {
+  res.render("edit-profile", { pageTitle: "Edit Profile" });
+};
+
+export const postEdit = async (req, res) => {
+  const {
+    session: {
+      user: { _id },
+    },
+    body: { name, email, username, location },
+  } = req.session.user;
+  const exists = await User.exists({
+    $ne: { _id },
+    $or: [{ username }, { email }],
+  });
+  if (exists) {
+    return res.status(400).render("/user/edit", {
+      pageTitle: "Edit Profile",
+      errorMessage: "This username/email is already taken.",
+    });
+  }
+  const updateUser = await User.findByIdAndUpdate(
+    _id,
+    {
+      name,
+      email,
+      username,
+      location,
+    },
+    { new: true }
+  );
+  req.session.user = updateUser;
+  res.render("/user/edit");
+};
+
 export const see = (req, res) => res.send("See User");
