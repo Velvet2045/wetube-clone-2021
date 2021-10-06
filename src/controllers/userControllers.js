@@ -1,5 +1,5 @@
 import User from "../models/User";
-import fetch from "node-fetch";
+import axios from "axios";
 import bcrypt from "bcrypt";
 
 export const getJoin = (req, res) => res.render("join", { pageTitle: "Join" });
@@ -64,7 +64,7 @@ export const postLogin = async (req, res) => {
 export const startGithubLogin = (req, res) => {
   const baseUrl = "https://github.com/login/oauth/authorize";
   const config = {
-    clientId: process.env.GH_CLIENT,
+    client_id: process.env.GH_CLIENT,
     allow_signup: false,
     scope: "read:user user:email",
   };
@@ -82,31 +82,34 @@ export const finishGithubLogin = async (req, res) => {
   };
   const params = new URLSearchParams(config).toString();
   const finalUrl = `${baseUrl}?${params}`;
-  const tokenRequest = await (
-    await fetch(finalUrl, {
-      method: "POST",
+  const tokenRequest = (
+    await axios.post(finalUrl, {
       headers: {
         Accept: "application/json",
       },
     })
-  ).json();
-  if ("access_token" in tokenRequest) {
-    const { access_token } = json;
+  ).data.toString();
+
+  const dataPattern = /(?<=access_token=)(.*?)(?=&)/;
+  const isToken = dataPattern.test(tokenRequest);
+  if (isToken) {
+    const access_token = tokenRequest.match(dataPattern)[0];
     const apiUrl = "https://api.github.com";
-    const userData = await (
-      await fetch(`${apiUrl}/user`, {
+    const userData = (
+      await axios.get(`${apiUrl}/user`, {
         headers: {
           Authorization: `token ${access_token}`,
         },
       })
-    ).json();
-    const emailData = await (
-      await fetch(`${apiUrl}/user/emails`, {
+    ).data;
+    const emailData = (
+      await axios.get(`${apiUrl}/user/emails`, {
         headers: {
           Authorization: `token ${access_token}`,
         },
       })
-    ).json();
+    ).data;
+    console.log(emailData);
     const emailObj = emailData.find(
       (email) => email.primary === true && email.verified === true
     );
@@ -126,7 +129,7 @@ export const finishGithubLogin = async (req, res) => {
       });
     }
     req.session.loggedIn = true;
-    req.session.user = existingUser;
+    req.session.user = user;
     return res.redirect("/");
   } else {
     return res.redirect("/login");
