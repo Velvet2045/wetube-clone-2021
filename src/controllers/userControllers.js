@@ -109,7 +109,6 @@ export const finishGithubLogin = async (req, res) => {
         },
       })
     ).data;
-    console.log(emailData);
     const emailObj = emailData.find(
       (email) => email.primary === true && email.verified === true
     );
@@ -146,18 +145,17 @@ export const getEdit = (req, res) => {
 };
 
 export const postEdit = async (req, res) => {
+  console.log(req.session);
   const {
-    session: {
-      user: { _id },
-    },
+    session: { user: _id },
     body: { name, email, username, location },
-  } = req.session.user;
+  } = req;
   const exists = await User.exists({
     $ne: { _id },
     $or: [{ username }, { email }],
   });
   if (exists) {
-    return res.status(400).render("/user/edit", {
+    return res.status(400).render("edit-profile", {
       pageTitle: "Edit Profile",
       errorMessage: "This username/email is already taken.",
     });
@@ -173,7 +171,7 @@ export const postEdit = async (req, res) => {
     { new: true }
   );
   req.session.user = updateUser;
-  res.render("/user/edit");
+  res.redirect("/");
 };
 
 export const see = (req, res) => res.send("See User");
