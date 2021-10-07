@@ -1,4 +1,5 @@
 import Video from "../models/Video";
+import User from "../models/User";
 
 // Video.find({}, (error, videos) => {});
 export const home = async (req, res) => {
@@ -61,20 +62,22 @@ export const getUpload = (req, res) => {
 };
 
 export const postUpload = async (req, res) => {
-  const {
-    user: { _id },
-  } = req.session;
   const file = req.file;
-  const { title, description, hashtags } = req.body;
+  const {
+    session: {
+      user: { _id: owner },
+    },
+    body: { title, description, hashtags },
+  } = req;
   try {
     const newVideo = await Video.create({
       title,
-      description,
       fileUrl: file.path,
-      owner: _id,
+      description,
       hashtags: Video.formatHashtags(hashtags),
+      owner,
     });
-    const user = await User.findById(_id);
+    const user = await User.findById(owner);
     user.videos.push(newVideo._id);
     user.save();
     return res.redirect("/");
