@@ -154,9 +154,10 @@ export const postEdit = async (req, res) => {
     file,
   } = req;
   const exists = await User.exists({
-    $ne: { _id },
+    _id: { $ne: { _id } },
     $or: [{ username }, { email }],
   });
+
   if (exists) {
     return res.status(400).render("edit-profile", {
       pageTitle: "Edit Profile",
