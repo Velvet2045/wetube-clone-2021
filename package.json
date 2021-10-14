@@ -32,7 +32,8 @@
     "node": "^16.10.0",
     "node-fetch": "^3.0.0",
     "nodejs": "^0.0.0",
-    "pug": "^3.0.2"
+    "pug": "^3.0.2",
+    "regenerator-runtime": "^0.13.9"
   },
   "devDependencies": {
     "@babel/core": "^7.15.0",
