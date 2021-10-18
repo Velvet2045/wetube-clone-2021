@@ -3,6 +3,7 @@ import "./models/Video";
 import express from "express";
 import morgan from "morgan";
 import session from "express-session";
+import flash from "express-flash";
 import MongoStore from "connect-mongo";
 import rootRouter from "./routers/rootRouter";
 import videoRouter from "./routers/videoRouter";
@@ -27,6 +28,7 @@ app.use(
   })
 );
 
+app.use(flash());
 app.use(loacalsMiddleware);
 app.use("/uploads", express.static("uploads"));
 app.use("/static", express.static("assets"));
