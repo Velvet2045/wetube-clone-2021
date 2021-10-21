@@ -14,12 +14,21 @@ let controlsMovementTimeout = null;
 let volumeValue = 0.5;
 video.volume = volumeValue;
 
-if (video.readyState >= 2) {
-  getmetadata();
-}
+const formatTime = (seconds) => {
+  new Date(seconds * 1000).toISOString().substr(11, 8);
+};
+
+const handleLoadedMetadata = () => {
+  totalTime.innerText = formatTime(Math.floor(video.duration));
+  timeline.max = Math.floor(video.duration);
+};
 
 function getmetadata() {
   handleLoadedMetadata();
+}
+
+if (video.readyState >= 2) {
+  getmetadata();
 }
 
 const handlePlayClick = (e) => {
@@ -60,15 +69,6 @@ const handleVolumeChange = (event) => {
     video.muted = true;
     muteBtn.innerText = "Unmute";
   }
-};
-
-const formatTime = (seconds) =>
-  new Date(seconds * 1000).toISOString().substr(11, 8);
-
-const handleLoadedMetadata = () => {
-  totalTime.innerText = formatTime(Math.floor(video.duration));
-  timeline.max = Math.floor(video.duration);
-  console.log(timeline.max);
 };
 
 const handleTimeUpdate = () => {
