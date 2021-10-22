@@ -11,7 +11,7 @@ import { protectorMiddleware, videoUpload } from "../middlewares";
 
 const videoRouter = express.Router();
 
-videoRouter.route("/:id([0-9a-z]{24})").get(watch);
+videoRouter.route("/:id([0-9a-z]{24})").get(watch).delete(watch);
 videoRouter
   .route("/:id([0-9a-z]{24})/edit")
   .all(protectorMiddleware)
