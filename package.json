@@ -7,7 +7,9 @@
     "db-end": "sudo service mongodb stop",
     "dev:server": "nodemon",
     "dev:assets": "webpack",
-    "dev:server restart": "kill -9 $(ps aux | grep 'snodes' | awk '{print $2}') && node ./src/app.js "
+    "dev:server restart": "kill -9 $(ps aux | grep 'snodes' | awk '{print $2}') && node ./src/app.js",
+    "build:server": "babel src -d build",
+    "start": "node build/init.js"
   },
   "repository": {
     "type": "git",
@@ -37,7 +39,8 @@
     "regenerator-runtime": "^0.13.9"
   },
   "devDependencies": {
-    "@babel/core": "^7.15.0",
+    "@babel/cli": "^7.15.7",
+    "@babel/core": "^7.15.8",
     "@babel/node": "^7.14.9",
     "@babel/preset-env": "^7.15.0",
     "babel-loader": "^8.2.2",
