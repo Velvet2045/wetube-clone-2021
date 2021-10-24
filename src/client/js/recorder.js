@@ -1,4 +1,4 @@
-const startBtn = document.getElementById("startBtn");
+const startBtn = document.getElementById("actionBtn");
 const video = document.getElementById("preview");
 
 let stream;
