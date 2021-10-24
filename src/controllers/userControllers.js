@@ -168,10 +168,11 @@ export const postEdit = async (req, res) => {
       errorMessage: "This username/email is already taken.",
     });
   }
+  const filePath = file.location ? file.location : file.path;
   const updateUser = await User.findByIdAndUpdate(
     _id,
     {
-      avatarUrl: file ? file.location : avatarUrl,
+      avatarUrl: file ? filePath : avatarUrl,
       name,
       email,
       username,

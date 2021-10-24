@@ -5,6 +5,7 @@
   "scripts": {
     "db-start": "sudo service mongodb start",
     "db-end": "sudo service mongodb stop",
+    "dev:server": "nodemon",
     "dev:assets": "webpack --mode=development -w",
     "dev:server restart": "kill -9 $(ps aux | grep 'snodes' | awk '{print $2}') && node ./src/app.js",
     "start": "node build/init.js",
