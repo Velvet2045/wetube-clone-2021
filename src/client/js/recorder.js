@@ -10,7 +10,7 @@ const handleDownload = () => {
   a.href = videoFile;
   a.download = "MyRecording.webm";
   document.body.appendChild(a);
-  a.clock();
+  a.click();
 };
 
 const handleStop = () => {
