@@ -8,7 +8,7 @@ import MongoStore from "connect-mongo";
 import rootRouter from "./routers/rootRouter";
 import videoRouter from "./routers/videoRouter";
 import userRouter from "./routers/userRouter";
-import apiRouter from "./routers/apiRouter";
+import apiRouter from "./routers/apirouter";
 import { loacalsMiddleware } from "./middlewares";
 
 const app = express();
